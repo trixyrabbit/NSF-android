@@ -17,7 +17,7 @@ import java.io.PrintWriter;
 import javax.crypto.Cipher;
 import javax.crypto.spec.IvParameterSpec;
 import javax.crypto.spec.SecretKeySpec;
-import org.apache.commons.io.*;
+//import org.apache.commons.io.*; /uness depend
 
 public class AES_Code
 {
@@ -26,8 +26,9 @@ public class AES_Code
     static String ciphertext; 
     static String encryptionKey = "0123456789abcdef";
 //args0 input: file to be encrypted
-    public static void main(String [] args)
+    public static void main(String[] args)
     {
+	System.out.println("Welcome to AES file ENCRYPTION/DECRYPTION test program");
         try {
 	    Scanner scan = new Scanner(System.in); //scanner object for user input
 
@@ -35,7 +36,7 @@ public class AES_Code
 		//PrintWriter for outputfile
 	    PrintWriter out = new PrintWriter(fileLocation + ".enc");
 	    Path path = Paths.get(fileLocation); //saves location
-	    String ext = FilenameUtils.getExtension(fileLocation); //saves the file extension
+	    String ext = fileLocation.substring(fileLocation.lastIndexOf("."), fileLocation.length());
 		//for recovering the original
 	    FileOutputStream fos = new FileOutputStream("itworks." + ext);
 		//read all the data from the user specified path to byte[]
@@ -76,3 +77,4 @@ public class AES_Code
         return new String(cipher.doFinal(cipherText),"UTF-8");
     }
 }
+
