@@ -22,13 +22,13 @@ public abstract class AES_Crypto
 {
 	protected static byte[] plaintext; //
 	protected static byte[] ciphertext; 
-	protected static byte[] cipher;
-	protected static byte[] decrypted;
+	//protected static byte[] cipher;
+	//protected static byte[] decrypted;
 	protected static String key = "0123456789abcdef" //default
 	protected static String fileLocation;
 	protected static String limbo;
 	protected static String IV = "AAAAAAAAAAAAAAAA"; //default
-	//construct
+	/** constructors, fileLocation indicates the file to operate on, Key indicates the encryption key to be used, and IV is the initial vectory required for any AES cryptoraphy. */
 	public AES_Crypto(String fileLocation, String Key, String IV, String limbo)
 	{
 		//init
@@ -46,6 +46,32 @@ public abstract class AES_Crypto
 	{
 		//init
 		this.fileLocation = fileLocation;
+	}
+	/** Methods for producing intermediate file and recovering original */
+	public void makeLimbo()
+	{
+		try{
+			//target path to write to
+			limbo = fileLocation + ".limbo";
+			//fos to create the intermediate encrypted file
+			FileOutputStream out = new FileOutputStream(new File(limbo));
+			//get path of file to decrypt
+			Path path = Paths.get(fileLocation);
+			plaintext = Files.readAllBytes(path); //copies file into byte array.
+			ciphertext = encrypt(plaintext, key); //calls encryption method
+			IOUtils.write(ciphertext, out); //prints the byte[] to file
+			out.close(); //close fos
+		} catch(Exception e) {e.printStackTrace();}
+	}
+	public void makeOriginal(String where)
+	{
+		try{
+			//the fos for reproducing the original file, where is the file path & name
+			FileOutputStream fos = new FileOutputStream(new File(where));
+			plaintext = decrypt(ciphertext, key);
+			IOUtils.write(plaintext, fos); //prints the byte[] to file
+			fos.close();
+		} catch(Exception e) {e.printStackTrace();}	
 	}
 
 	/** Methods for encryption and decryption*/
